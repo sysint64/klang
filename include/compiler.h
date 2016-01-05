@@ -4,6 +4,7 @@
 #include <memory>
 #include <string>
 
+class Parser;
 class Compiler {
 private:
 
@@ -23,7 +24,7 @@ private:
 
 public:
 	std::unique_ptr<Parser> parser;
-	std::string input;
+	std::string input  = "";
 	std::string output = "a.out";
 	std::string lang   = "en";
 

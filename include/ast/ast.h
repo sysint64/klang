@@ -5,15 +5,22 @@
 
 #include <memory>
 
-/** \brief base expression abstract tree node*/
+/** \brief base expression abstract tree node */
 
 class ExprAST {
 public:
-	TypeAST type;
-	int     align   = 0;
-	bool    isConst = false;
+	TypeAST      type;
+	int          align     = 0;
+	bool         isConst   = false;
+	long double  numValue  = 0;
+	std::string  strValue  = "";
+	std::wstring wstrValue = L"";
 
-	virtual std::shared_ptr<BaseIR> codegen();
+	ExprAST() {
+
+	}
+
+	virtual std::unique_ptr<BaseIR> codegen() { return nullptr; }
 };
 
 /** \brief base statement abstract tree node */

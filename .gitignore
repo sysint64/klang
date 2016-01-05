@@ -28,3 +28,5 @@
 *.app
 
 build/
+test.k
+.DS_Store

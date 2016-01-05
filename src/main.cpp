@@ -1,4 +1,5 @@
 #include <memory>
+#include <iostream>
 #include "compiler.h"
 
 int main (int argc, char *argv[]) {

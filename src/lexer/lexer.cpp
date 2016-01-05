@@ -1,6 +1,14 @@
 #include "lexer/lexer.h"
+#include "compiler.h"
 #include "utility.cpp"
 #include <math.h>
+
+Lexer::Lexer (Compiler *compiler) {
+
+	this->compiler = compiler;
+	openFile (compiler->input);
+
+}
 
 int Lexer::getChar() {
 
@@ -20,7 +28,7 @@ int Lexer::getChar() {
 
 }
 
-int Lexer::pushToken() {
+void Lexer::pushToken() {
 
 	Token tok;
 
@@ -35,7 +43,7 @@ int Lexer::pushToken() {
 
 }
 
-int Lexer::popToken() {
+void Lexer::popToken() {
 
 	currentToken = tokenStack[tsCursor-1].token;
 	identifier   = tokenStack[tsCursor-1].id;
@@ -183,7 +191,7 @@ int Lexer::lexNumber() {
 						case '.': state = 3; break;
 						case 'E':
 						case 'e': state = 5; break;
-						default: 9;
+						default: state = 9;
 
 					}
 
@@ -243,8 +251,11 @@ int Lexer::lexNumber() {
 
 		int scaleFactor = scaleStr == "" ? 0 : stod (scaleStr);
 		number = stod (numStr)*pow (10, scaleFactor);
+		return tok_number;
 
 	}
+
+	return tok_none;
 
 }
 
@@ -252,7 +263,41 @@ int Lexer::lexNumber() {
  */
 
 int Lexer::lexDots() {
+	return tok_none;
+}
 
-	
+int Lexer::lexString() {
+	return tok_none;
+}
 
+int Lexer::lexChar() {
+	return tok_none;
+}
+
+int Lexer::lexEq() {
+	return tok_none;
+}
+
+int Lexer::lexNe() {
+	return tok_none;
+}
+
+int Lexer::lexOr() {
+	return tok_none;
+}
+
+int Lexer::lexAnd() {
+	return tok_none;
+}
+
+int Lexer::lexLe() {
+	return tok_none;
+}
+
+int Lexer::lexGe() {
+	return tok_none;
+}
+
+int Lexer::lexComment() {
+	return '/';
 }

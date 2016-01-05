@@ -74,12 +74,16 @@ const Mat4f.indent =
 	<0.f, 0.f, 0.f ,1.f>
 ]
 
+def print (...)
+
+end
+
 def sum (const Num a, b) -> auto
-   a+b
+	a+b
 
 // Возведение в степень
 def binary ** (<Num> a, <Num> a, b) -> auto :: inline
-   fpow (a, b)
+	fpow (a, b)
 end
 
 // Перемножение 2х чисел

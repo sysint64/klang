@@ -2,8 +2,9 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
 
-enum TokenChar { // last: -10
+enum TokenChar { // last: -16
 
 	tok_eof = -1, tok_none = 0,
 	tok_id = -2, tok_number = -3, tok_string = -4,
@@ -11,9 +12,12 @@ enum TokenChar { // last: -10
 	tok_le = -5, tok_ge = -6, tok_ne = -7, tok_eq = -8,
 
 	tok_def = -9, tok_cc = -10,
+	tok_shl = -11, tok_shr = -12, tok_or = -13, tok_and = -14,
+	tok_true = -15, tok_false = -16,
 
 };
 
+class Compiler;
 class Lexer {
 public:
 	struct Token {
@@ -24,15 +28,15 @@ public:
 
 private:
 
+	Compiler *compiler;
 	std::vector<Token> tokenStack;
-	int currentToken;
 	int tsCursor = 0;
 	int lastChar = ' ';
 
-	int getChar();
-	int getToken();
-	int pushToken();
-	int popToken();
+	int  getChar();
+	int  getToken();
+	void pushToken();
+	void popToken();
 
 	//
 
@@ -51,6 +55,7 @@ private:
 
 public:
 
+	std::vector<FILE*> inputs;
 	FILE *inFile;
 
 	int line = 1;
@@ -59,8 +64,26 @@ public:
 	std::string identifier;
 	std::string meta;
 	long double number;
+	int currentToken;
 
 	int getNextToken();
 	int getPrevToken();
+
+	inline void printToken() {
+
+		std::cout << "Token code: " << currentToken << " "
+		          << "Token char: " << static_cast<char>(currentToken)
+		          << std::endl;
+
+	}
+
+	inline void openFile (const std::string &input) {
+
+		inFile = fopen (input.c_str(), "r");
+
+	}
+
+	Lexer (Compiler *compiler);
+	~Lexer() { fclose (inFile); }
 
 };
