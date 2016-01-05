@@ -37,10 +37,11 @@ void Compiler::displayMainHelp (int argc, char *argv[]) {
 
 	std::vector<Option> options;
 
-	options.push_back ({"--help"           , "Display this information"});
-	options.push_back ({"--emit={asm|llvm}", "Display generated code"});
-	options.push_back ({"-v"               , "Display the programs invoked by the compiler"});
-	options.push_back ({"-o <file>"        , "Place the output into <file>"});
+	options.push_back ({"--help"               , "Display this information"});
+	options.push_back ({"--emit={asm|llvm|cpp}", "Display generated code"});
+	options.push_back ({"--version"            , "Display compiler version"});
+	options.push_back ({"-v"                   , "Display the programs invoked by the compiler"});
+	options.push_back ({"-o <file>"            , "Place the output into <file>"});
 
 	// Print
 	std::cout << "Usage: " << argv[0] << " [options] file..." << std::endl;
@@ -72,6 +73,12 @@ void Compiler::parseCmd (int argc, char *argv[]) {
 		} else if (strcmp (argv[i], "--help=optimizers") == 0) {
 
 			displayOptimizersHelp (argc, argv);
+
+		} else if (strcmp (argv[i], "--emit=asm") == 0) {
+
+		} else if (strcmp (argv[i], "--emit=llvm") == 0) {
+
+		} else if (strcmp (argv[i], "--emit=cpp") == 0) {
 
 		} else if (strcmp(argv[i], "-o") == 0) {
 
