@@ -1,5 +1,7 @@
 #pragma once
+
 #include "codegen/codegen.h"
+#include "codegen/ir_factory.h"
 #include "codegen/cpp/ir.h"
 
 class CPPCodegen : public Codegen {
@@ -8,7 +10,7 @@ public:
 	CPPCodegen () { f = fopen ("a.out.cpp", "w"); }
 	~CPPCodegen() { if (f != nullptr) fclose(f); }
 
-	CODEGEN_FACTORY(cpp_ir)
+	//CODEGEN_FACTORY(cpp_ir)
 
 	virtual void emit() override {
 

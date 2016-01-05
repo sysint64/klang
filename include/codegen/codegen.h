@@ -1,5 +1,9 @@
 #pragma once
 
+#include <string>
+#include <vector>
+#include <iostream>
+
 class BaseIR {
 public:
 	std::string emit;
@@ -34,9 +38,9 @@ public:
 	Arch arch = x32;
 	bool skipInsert = false;
 
-	inline void emitIR (const std::string &line, const bool F = false) {
+	virtual inline void emitIR (const std::string &line, const bool F = false) {
 
-		if (emitConsole) puts (line.c_str());
+		if (emitConsole) std::cout << line << std::endl;
 		fputs ((line+"\n").c_str(), f);
 
 	}
@@ -61,12 +65,20 @@ public:
 	virtual void optimize() {}
 	virtual void save()     {}
 
-};
+	// Types
 
-#define CODEGEN_FACTORY(ir) \
-	inline std::unique_ptr<BaseIR> createIntTyIR (const int size) { \
-		return std::make_unique<ir::IntTyIR> (size); \
-	} \
+	virtual inline std::unique_ptr<BaseIR> createIntTyIR (const int size) { return nullptr; }
+
+	// Values
+
+	virtual inline std::unique_ptr<BaseIR> createIntValIR (const int64_t val, const int size) { return nullptr; }
+
+	// Arithmetic
+
+	virtual inline std::unique_ptr<BaseIR> createAddIR (std::unique_ptr<BaseIR> A, std::unique_ptr<BaseIR> B,
+		const bool nsw = false, const bool nuw = false) { return nullptr; }
+
+};
 
 #include "codegen/llvm/codegen.h"
 #include "codegen/cpp/codegen.h"

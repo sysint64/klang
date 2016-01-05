@@ -1,4 +1,5 @@
 #include "parser/parser.h"
+#include "compiler.h"
 
 Parser::Parser (Compiler *compiler) {
 
@@ -17,5 +18,28 @@ Parser::Parser (Compiler *compiler) {
 	binopPrecedence['%']     = 3;  binopPrecedence['&']     = 3;
 	binopPrecedence[tok_shl] = 3;  binopPrecedence[tok_shr] = 3;
 	binopPrecedence[tok_or]  = 5;  binopPrecedence[tok_and] = 5;
+
+}
+
+void Parser::parse() {
+
+	lexer->tokenStack.clear();
+
+	while (true) {
+
+		lexer->getNextToken();
+
+		switch (lexer->currentToken) {
+
+			case tok_eof : return;
+			default:
+				auto e  = parseExpr();
+				auto ir = e->codegen();
+
+				compiler->getCurrentCodegen()->insert (std::move(ir), Codegen::Head);
+
+		}
+
+	}
 
 }

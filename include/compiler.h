@@ -1,6 +1,7 @@
 #pragma once
 
 #include "parser/parser.h"
+#include "codegen/codegen.h"
 #include <memory>
 #include <string>
 
@@ -27,8 +28,10 @@ public:
 	std::string input  = "";
 	std::string output = "a.out";
 	std::string lang   = "en";
+	std::unique_ptr<Codegen> codegen;
 
 	void compile();
 	void parseCmd (int argc, char *argv[]);
+	inline Codegen *getCurrentCodegen() { return codegen.get(); };
 
 };

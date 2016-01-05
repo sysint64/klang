@@ -1,6 +1,7 @@
 #pragma once
 
 #include "codegen/codegen.h"
+#include "codegen/ir_factory.h"
 #include "codegen/llvm/ir.h"
 
 class LLVMCodegen : public Codegen {

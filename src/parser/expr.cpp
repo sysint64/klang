@@ -141,6 +141,7 @@ std::unique_ptr<ExprAST> Parser::parseBinary (int exprPrec, std::unique_ptr<Expr
 std::unique_ptr<ExprAST> Parser::parseExpr() {
 
 	auto LHS = parseUnary();
+	lexer->printToken();
 
 	if (!LHS)
 		return nullptr;

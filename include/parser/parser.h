@@ -32,6 +32,8 @@ public:
 	std::unique_ptr<ExprAST> parseNumber();
 	std::unique_ptr<ExprAST> parseParen();
 
+	void parse();
+
 	inline int getTokPrecedence() {
 
 		int tokPrec = binopPrecedence[lexer->currentToken];

@@ -1,4 +1,5 @@
 #pragma once
+#include "ast/ast.h"
 
 class IntExprAST : public ExprAST {
 public:
@@ -12,7 +13,7 @@ public:
 		numValue = val;
 	}
 
-	virtual std::unique_ptr<BaseIR> codegen() override { return nullptr; }
+	virtual std::unique_ptr<BaseIR> codegen() override;
 
 };
 
@@ -25,7 +26,7 @@ public:
 
 	}
 
-	virtual std::unique_ptr<BaseIR> codegen() override { return nullptr; }
+	virtual std::unique_ptr<BaseIR> codegen() override;
 
 };
 
@@ -37,6 +38,6 @@ public:
 	NumBinaryExprAST (char op, std::unique_ptr<ExprAST> LHS, std::unique_ptr<ExprAST> RHS) :
 		op(op), LHS (std::move(LHS)), RHS (std::move(RHS)) {}
 
-	virtual std::unique_ptr<BaseIR> codegen() override { return nullptr; }
+	virtual std::unique_ptr<BaseIR> codegen() override;
 
 };

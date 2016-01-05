@@ -2,20 +2,17 @@
 #include <iostream>
 #include "compiler.h"
 #include "codegen/llvm/codegen.h"
+#include "config.h"
+
+extern Compiler *compiler(new Compiler());
 
 int main (int argc, char *argv[]) {
 
-	std::unique_ptr<Compiler> compiler = std::make_unique<Compiler>();
-
 	compiler->parseCmd (argc, argv);
-	//compiler->compile();
-	LLVMCodegen codegen;
+	compiler->compile();
+	compiler->getCurrentCodegen()->emit();
 
-	codegen.insert (std::move(codegen.createIntTyIR(32)), Codegen::Head);
-
-	codegen.input = "test";
-	codegen.emit();
-
+	delete compiler;
 	return 0;
 
 }

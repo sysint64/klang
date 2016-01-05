@@ -29,7 +29,6 @@ public:
 private:
 
 	Compiler *compiler;
-	std::vector<Token> tokenStack;
 	int tsCursor = 0;
 	int lastChar = ' ';
 
@@ -55,6 +54,7 @@ private:
 
 public:
 
+	std::vector<Token> tokenStack;
 	std::vector<FILE*> inputs;
 	FILE *inFile;
 
