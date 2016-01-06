@@ -33,10 +33,15 @@ endif()
 set(SOURCE_EXE src/main.cpp src/compiler.cpp src/cmd.cpp)
 
 add_executable(main ${SOURCE_EXE})
-include_directories(include src/lexer src/parser src/codegen)
 
+find_package(Boost COMPONENTS system filesystem REQUIRED)
+
+include_directories(include src/lexer src/parser src/codegen)
+include_directories(${Boost_INCLUDE_DIRS})
+
+add_subdirectory(src/ast)
 add_subdirectory(src/lexer)
 add_subdirectory(src/parser)
 add_subdirectory(src/codegen)
 
-target_link_libraries(main lexer parser codegen)
+target_link_libraries(main ast lexer parser codegen)

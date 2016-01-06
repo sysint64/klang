@@ -31,15 +31,25 @@ void Parser::parse() {
 
 		switch (lexer->currentToken) {
 
+			case tok_def : handleDefinition(); break;
 			case tok_eof : return;
 			default:
-				auto e  = parseExpr();
-				auto ir = e->codegen();
+				//auto e  = parseExpr();
+				//auto ir = e->codegen();
 
-				compiler->getCurrentCodegen()->insert (std::move(ir), Codegen::Head);
+				//compiler->getCurrentCodegen()->insert (std::move(ir), Codegen::Head);
+				//lexer->getNextToken();
+				break;
 
 		}
 
 	}
+
+}
+
+void Parser::handleDefinition() {
+
+	if (auto stmt = parsePrototype()) stmt ->codegen();
+	else                              lexer->getNextToken();
 
 }

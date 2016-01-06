@@ -98,8 +98,10 @@ std::unique_ptr<ExprAST> Parser::foldingBinary (char op, std::unique_ptr<ExprAST
 }
 
 /**
-	\brief Parse Binary
-	BINARY ::= ('+' NUM)* >
+\brief
+	Parse binary expression, example: `1+3*(4+b)`
+	Grammar:
+	    BINARY ::= ('+' NUM)* >
  */
 
 std::unique_ptr<ExprAST> Parser::parseBinary (int exprPrec, std::unique_ptr<ExprAST> LHS) {
@@ -135,6 +137,34 @@ std::unique_ptr<ExprAST> Parser::parseBinary (int exprPrec, std::unique_ptr<Expr
 		LHS = foldingBinary (binOp, std::move(LHS), std::move(RHS));
 
 	}
+
+}
+
+/**
+\brief
+	Parse variable or variable list, examples: `Int a, b = 1, 3`, `Int a, b, c = 1, ...`
+	Grammar:
+	    VARS   ::= TYPE IDS | TYPE IDS '=' VALUES
+	    IDS    ::= IDS | ID ',' IDS
+	    VALUES ::= VALUES | VALUES ',' VALUE | VALUES ',' '...'
+*/
+
+std::unique_ptr<ExprAST> Parser::parseVar() {
+
+	auto type = parseType();
+
+	if (!type)
+		return nullptr;
+
+	if (lexer->currentToken != tok_id) {
+		puts ("Expected identifier");
+		return nullptr;
+	}
+
+	auto id = lexer->identifier;
+	lexer->getNextToken();
+
+	return nullptr;
 
 }
 

@@ -21,17 +21,34 @@ public:
 
 	Parser (Compiler *compiler);
 
+	// Expr
+
 	std::unique_ptr<ExprAST> parseValue(); // -
 	std::unique_ptr<ExprAST> parseUnary(); // -
 	std::unique_ptr<ExprAST> foldingBinary (char op, std::unique_ptr<ExprAST> LHS, std::unique_ptr<ExprAST> RHS); // -
 	std::unique_ptr<ExprAST> parseBinary (int exprPrec, std::unique_ptr<ExprAST> LHS); // -
 	std::unique_ptr<ExprAST> parseExpr(); // -
+	std::unique_ptr<ExprAST> parseVar(); // -
 
 	// Values
-	std::unique_ptr<ExprAST> parseBoolean (const bool val) const;
-	std::unique_ptr<ExprAST> parseNumber();
-	std::unique_ptr<ExprAST> parseParen();
 
+	std::unique_ptr<ExprAST> parseBoolean (const bool val) const; // +
+	std::unique_ptr<ExprAST> parseNumber(); // -
+	std::unique_ptr<ExprAST> parseParen(); // -
+
+	// Function
+
+	std::unique_ptr<ArgsAST>       parseArgs(); // -
+	std::unique_ptr<DirectivesAST> parseDirectives(); // -
+	std::unique_ptr<PrototypeAST>  parsePrototype(); // -
+
+	// Type
+
+	std::shared_ptr<TypeAST> parseType(); // -
+
+	// Handles
+
+	void handleDefinition();
 	void parse();
 
 	inline int getTokPrecedence() {

@@ -41,3 +41,17 @@ public:
 	virtual std::unique_ptr<BaseIR> codegen() override;
 
 };
+
+class StmtExprAST : public StmtAST {
+public:
+};
+
+class AssignStmtAST : public StmtAST {
+public:
+};
+
+class VarExprAST : public ExprAST {
+public:
+	std::string name = "";
+	std::unique_ptr<ExprAST> defaultValue = nullptr;
+};
