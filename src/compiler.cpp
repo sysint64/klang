@@ -30,6 +30,8 @@ void Compiler::declareDefaultTypes() {
 	std::shared_ptr<TypesDict> globalTypeDict = std::make_shared<TypesDict>();
 	typesDictsStack.push_back (globalTypeDict);
 
+	declareType (std::make_shared<VoidTypeAST> ("void"));
+
 	// Signed
 
 	declareType (std::make_shared<IntTypeAST> ("bool"    , 1));

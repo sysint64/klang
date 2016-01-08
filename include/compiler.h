@@ -39,6 +39,7 @@ public:
 	std::string input  = "";
 	std::string output = "a.out";
 	std::string lang   = "en";
+	std::string currentNamespace = "main";
 	std::unique_ptr<Codegen> codegen;
 
 	void compile();

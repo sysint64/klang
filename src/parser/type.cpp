@@ -4,8 +4,6 @@
 std::shared_ptr<TypeAST> Parser::parseType() {
 
 	auto type = compiler->findType (lexer->identifier);
-	lexer->getNextToken();
-
 	return type;
 
 }

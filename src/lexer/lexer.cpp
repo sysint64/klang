@@ -107,6 +107,28 @@ int Lexer::getToken() {
 	if (lastChar == '>')    return lexGe();
 	if (lastChar == '/')    return lexComment();
 
+	if (lastChar == '-') {
+		lastChar = getChar();
+
+		if (lastChar == '>') {
+			lastChar = getChar();
+			return tok_ra;
+		}
+
+		return '-';
+	}
+
+	if (lastChar == ':') {
+		lastChar = getChar();
+
+		if (lastChar == ':') {
+			lastChar = getChar();
+			return tok_dd;
+		}
+
+		return ':';
+	}
+
 	int thisChar = lastChar;
 	    lastChar = getChar();
 

@@ -54,4 +54,13 @@ class VarExprAST : public ExprAST {
 public:
 	std::string name = "";
 	std::unique_ptr<ExprAST> defaultValue = nullptr;
+
+	VarExprAST (const std::string &name, std::unique_ptr<ExprAST> defaultValue,
+		std::shared_ptr<TypeAST> type) : name (name), defaultValue(std::move(defaultValue))
+	{
+		this->type = type;
+	}
+
+	virtual std::unique_ptr<BaseIR> codegen() override;
+
 };

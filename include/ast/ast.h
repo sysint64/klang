@@ -6,7 +6,8 @@
 
 class NodeAST {
 public:
-	virtual std::unique_ptr<BaseIR> codegen() { return nullptr; }
+	virtual std::unique_ptr<BaseIR> codegen()        { return nullptr; }
+	virtual std::unique_ptr<BaseIR> codegenDeclare() { return nullptr; }
 };
 
 class TypeAST : public NodeAST {
@@ -22,8 +23,8 @@ public:
 	std::shared_ptr<TypeAST> staticCast();
 	std::shared_ptr<TypeAST> dynamicCast();
 
-	inline  std::shared_ptr<TypeAST> dereference()    { return child;   }
-	virtual std::unique_ptr<BaseIR>  codegenDeclare() { return nullptr; }
+	inline std::shared_ptr<TypeAST> dereference() { return child; }
+	TypeAST (const std::string &name) : name(name) {}
 
 };
 
@@ -31,7 +32,7 @@ public:
 
 class ExprAST : public NodeAST {
 public:
-	TypeAST      type;
+	std::shared_ptr<TypeAST> type;
 	int          align     = 0;
 	bool         isConst   = false;
 	long double  numValue  = 0;

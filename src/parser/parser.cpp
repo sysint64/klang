@@ -38,8 +38,9 @@ void Parser::parse() {
 				//auto ir = e->codegen();
 
 				//compiler->getCurrentCodegen()->insert (std::move(ir), Codegen::Head);
-				//lexer->getNextToken();
+				lexer->getNextToken();
 				break;
+				//return;
 
 		}
 
@@ -49,7 +50,15 @@ void Parser::parse() {
 
 void Parser::handleDefinition() {
 
-	if (auto stmt = parsePrototype()) stmt ->codegen();
-	else                              lexer->getNextToken();
+	if (auto def = parsePrototype()) {
+
+		auto IR = def->codegen();
+		compiler->getCurrentCodegen()->insert (std::move(IR), Codegen::Head);
+
+	} else {
+
+		lexer->getNextToken();
+
+	}
 
 }

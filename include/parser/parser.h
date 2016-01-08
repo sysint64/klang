@@ -38,8 +38,9 @@ public:
 
 	// Function
 
-	std::unique_ptr<ArgsAST>       parseArgs(); // -
-	std::unique_ptr<DirectivesAST> parseDirectives(); // -
+	std::unique_ptr<ArgsAST>       parseArgs(); // +
+	std::unique_ptr<DirectiveAST>  parseDirective(); // -
+	std::unique_ptr<DirectivesAST> parseDirectives(); // +
 	std::unique_ptr<PrototypeAST>  parsePrototype(); // -
 
 	// Type

@@ -3,8 +3,6 @@
 
 std::unique_ptr<BaseIR> IntExprAST::codegen() {
 
-	puts ("2");
-
 	if (!compiler) puts ("compiler");
 	else if (!compiler->getCurrentCodegen()) puts ("codegenerator");
 
@@ -18,9 +16,14 @@ std::unique_ptr<BaseIR> UnaryExprAST::codegen() {
 
 }
 
-std::unique_ptr<BaseIR> NumBinaryExprAST::codegen() {
+std::unique_ptr<BaseIR> VarExprAST::codegen() {
 
-	puts ("1");
+	auto codegen = compiler->getCurrentCodegen();
+	return codegen->createArgIR (name, type->codegen());
+
+}
+
+std::unique_ptr<BaseIR> NumBinaryExprAST::codegen() {
 
 	std::unique_ptr<BaseIR> L = LHS->codegen();
 	std::unique_ptr<BaseIR> R = RHS->codegen();

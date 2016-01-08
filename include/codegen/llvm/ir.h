@@ -1,5 +1,6 @@
 #pragma once
 #include "codegen/codegen.h"
+#include <cassert>
 
 namespace llvm_ir {
 
@@ -15,7 +16,17 @@ namespace llvm_ir {
 			if (size < 8)
 				align = 8;
 
-			type = this;
+		}
+
+	};
+
+	class VoidTyIR : public BaseIR {
+	public:
+
+		VoidTyIR() {
+
+			emit = "void";
+			addr = emit;
 
 		}
 
@@ -65,6 +76,88 @@ namespace llvm_ir {
 			emit = "  "+addr+" = add "+nw+A->type->emit+" "+A->addr+", "+B->addr;
 
 		}
+
+	};
+
+	class ArgIR : public BaseIR {
+	public:
+
+		ArgIR (const std::string &name, std::unique_ptr<BaseIR> type) {
+
+			//assert (!type);
+			emit = "%"+type->addr+" %"+name;
+			//%string* %s.arg, i32 %size.arg
+
+		}
+
+	};
+
+	class ArgsIR : public BaseIR {
+	public:
+
+		ArgsIR (std::vector<std::unique_ptr<BaseIR>> args) {
+
+			for (const auto &arg : args)
+				emit += arg->emit+", ";
+
+			if (emit.size() >= 2) { // Remove last ", "
+
+				emit.pop_back();
+				emit.pop_back();
+
+			}
+
+		}
+
+	};
+
+	class DirectivesIR : public BaseIR {
+	public:
+
+		DirectivesIR (std::vector<std::unique_ptr<BaseIR>> directives) {
+
+			for (const auto &directive : directives)
+				emit += directive->emit+" ";
+
+			if (emit.size() >= 2) // Remove last " "
+				emit.pop_back();
+
+		}
+
+	};
+
+	class DefIR : public BaseIR {
+	public:
+
+		DefIR (const std::string &name, std::unique_ptr<BaseIR> args,
+			std::unique_ptr<BaseIR> directives, std::unique_ptr<BaseIR> type)
+		{
+
+			std::string directivesEmit = directives ? directives->emit : "";
+			std::string argsEmit       = args       ? args      ->emit : "";
+
+			if (directivesEmit != "") directivesEmit += " ";
+			emit = "define "+type->emit+" @"+name+"("+argsEmit+") "+directivesEmit+"{";
+
+		}
+
+	};
+
+	class RetIR : public BaseIR {
+
+	};
+
+	class BodyIR : public BaseIR {
+
+	};
+
+	class InlineDirectiveIR : public BaseIR {
+	public:
+		InlineDirectiveIR () { emit = "inlinehint"; }
+	};
+
+	class ExternDirectiveIR : public BaseIR {
+	public:
 
 	};
 

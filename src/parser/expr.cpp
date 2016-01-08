@@ -148,13 +148,17 @@ std::unique_ptr<ExprAST> Parser::parseBinary (int exprPrec, std::unique_ptr<Expr
 	    IDS    ::= IDS | ID ',' IDS
 	    VALUES ::= VALUES | VALUES ',' VALUE | VALUES ',' '...'
 */
-
+#include <iostream>
 std::unique_ptr<ExprAST> Parser::parseVar() {
 
 	auto type = parseType();
-
-	if (!type)
+	if (!type) {
+		std::cout << "type " << lexer->identifier << " does not name" << std::endl;
+		lexer->getNextToken();
 		return nullptr;
+	}
+
+	lexer->getNextToken();
 
 	if (lexer->currentToken != tok_id) {
 		puts ("Expected identifier");
@@ -164,7 +168,7 @@ std::unique_ptr<ExprAST> Parser::parseVar() {
 	auto id = lexer->identifier;
 	lexer->getNextToken();
 
-	return nullptr;
+	return std::make_unique<VarExprAST> (id+".arg", nullptr, type);
 
 }
 

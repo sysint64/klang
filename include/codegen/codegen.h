@@ -67,11 +67,14 @@ public:
 
 	// Types
 
-	virtual inline std::unique_ptr<BaseIR> createIntTyIR (const int size) { return nullptr; }
-
-	// Values
-
+	virtual inline std::unique_ptr<BaseIR> createVoidTyIR () { return nullptr; }
+	virtual inline std::unique_ptr<BaseIR> createIntTyIR  (const int size) { return nullptr; }
 	virtual inline std::unique_ptr<BaseIR> createIntValIR (const int64_t val, const int size) { return nullptr; }
+	virtual inline std::unique_ptr<BaseIR> createDefIR    (const std::string &name, std::unique_ptr<BaseIR> args, std::unique_ptr<BaseIR> directives, std::unique_ptr<BaseIR> type) { return nullptr; }
+	virtual inline std::unique_ptr<BaseIR> createArgIR    (const std::string &name, std::unique_ptr<BaseIR> type) { return nullptr; }
+	virtual inline std::unique_ptr<BaseIR> createArgsIR   (std::vector<std::unique_ptr<BaseIR>> args) { return nullptr; }
+	virtual inline std::unique_ptr<BaseIR> createInlineDirectiveIR () { return nullptr; }
+	virtual inline std::unique_ptr<BaseIR> createDirectivesIR (std::vector<std::unique_ptr<BaseIR>> directives) { return nullptr; }
 
 	// Arithmetic
 
