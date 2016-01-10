@@ -1,14 +1,18 @@
 #pragma once
 
+#include "ast/ast.h"
 #include "lexer/lexer.h"
-#include "ast/all.h"
+#include "codegen/codegen.h"
 
 #include <memory>
 #include <unordered_map>
 
-#define sptr std::shared_ptr
-#define uptr std::unique_ptr
-
+class ArgsAST;
+class DirectiveAST;
+class DirectivesAST;
+class PrototypeAST;
+class TypeAST;
+//
 class Compiler;
 class Lexer;
 class Parser {
@@ -28,7 +32,7 @@ public:
 	std::unique_ptr<ExprAST> foldingBinary (char op, std::unique_ptr<ExprAST> LHS, std::unique_ptr<ExprAST> RHS); // -
 	std::unique_ptr<ExprAST> parseBinary (int exprPrec, std::unique_ptr<ExprAST> LHS); // -
 	std::unique_ptr<ExprAST> parseExpr(); // -
-	std::unique_ptr<ExprAST> parseVar(); // -
+	std::shared_ptr<ExprAST> parseVar (const bool arg = false); // -
 
 	// Values
 

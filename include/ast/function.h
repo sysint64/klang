@@ -1,5 +1,6 @@
 #pragma once
 #include "ast/ast.h"
+#include "compiler.h"
 
 class DirectiveAST : public NodeAST {
 public:
@@ -26,17 +27,19 @@ public:
 
 class ArgsAST : public NodeAST {
 public:
-	std::vector<std::unique_ptr<ExprAST>> args;
-	ArgsAST (std::vector<std::unique_ptr<ExprAST>> args) : args (std::move(args)) {}
+	std::vector<std::shared_ptr<ExprAST>> args;
+
+	ArgsAST (std::vector<std::shared_ptr<ExprAST>> args) : args (std::move(args)) {}
 	virtual std::unique_ptr<BaseIR> codegen() override;
 
 };
 
 class PrototypeAST : public NodeAST {
 public:
-	std::shared_ptr<TypeAST>       type;
-	std::unique_ptr<DirectivesAST> directives;
-	std::unique_ptr<ArgsAST>       args;
+	std::shared_ptr<Compiler::VarsDict> varsDict;
+	std::shared_ptr<TypeAST>            type;
+	std::unique_ptr<DirectivesAST>      directives;
+	std::unique_ptr<ArgsAST>            args;
 
 	std::string name;
 
@@ -49,5 +52,5 @@ public:
 
 	virtual std::unique_ptr<BaseIR> codegen()        override;
 	virtual std::unique_ptr<BaseIR> codegenDeclare() override;
-	
+
 };

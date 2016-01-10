@@ -1,14 +1,16 @@
 #pragma once
 
-#include "ast/ast.h"
-#include "ast/type.h"
-#include "parser/parser.h"
-#include "codegen/codegen.h"
 #include <memory>
 #include <string>
 #include <map>
+#include <vector>
 
-class Parser;
+#include "parser/parser.h"
+
+class TypeAST;
+class PrototypeAST;
+class VarExprAST;
+class Codegen;
 class Compiler {
 private:
 
@@ -25,15 +27,16 @@ private:
 	void displayMainHelp       (int argc, char *argv[]);
 
 	void loadMessages();
-	void declareType (std::shared_ptr<TypeAST> type);
 	void declareDefaultTypes();
 
 public:
 	typedef std::map<std::string, std::shared_ptr<TypeAST>>      TypesDict;
 	typedef std::map<std::string, std::shared_ptr<PrototypeAST>> FuncsDict;
+	typedef std::map<std::string, std::shared_ptr<VarExprAST>>   VarsDict;
 
 	std::vector<std::shared_ptr<TypesDict>> typesDictsStack;
 	std::vector<std::shared_ptr<FuncsDict>> funcsDictsStack;
+	std::vector<std::shared_ptr<VarsDict >> varsDictsStack;
 
 	std::unique_ptr<Parser> parser;
 	std::string input  = "";
@@ -47,5 +50,12 @@ public:
 	inline Codegen *getCurrentCodegen() { return codegen.get(); };
 
 	std::shared_ptr<TypeAST> findType (const std::string &id) const;
+
+	template<typename T, typename DT>
+	void declare (std::shared_ptr<T> obj, const DT &dicts);
+
+	void declareType (std::shared_ptr<TypeAST>      type);
+	void declareFunc (std::shared_ptr<PrototypeAST> func);
+	void declareVar  (std::shared_ptr<VarExprAST>   var );
 
 };

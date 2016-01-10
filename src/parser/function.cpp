@@ -1,3 +1,4 @@
+#include "ast/all.h"
 #include "parser/parser.h"
 #include "compiler.h"
 
@@ -9,7 +10,7 @@
 
 std::unique_ptr<ArgsAST> Parser::parseArgs() {
 
-	std::vector<std::unique_ptr<ExprAST>> args;
+	std::vector<std::shared_ptr<ExprAST>> args;
 
 	do {
 

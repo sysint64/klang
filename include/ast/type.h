@@ -16,7 +16,6 @@ public:
 
 	IntTypeAST (const std::string &name, int size, bool isUnsigned = false) : TypeAST (name) {
 
-		//this->name = name;
 		this->size = size;
 		typeClass  = TypeAST::Int;
 

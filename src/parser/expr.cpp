@@ -1,3 +1,4 @@
+#include "ast/all.h"
 #include "parser/parser.h"
 
 std::unique_ptr<ExprAST> Parser::parseNumber() {
@@ -149,7 +150,7 @@ std::unique_ptr<ExprAST> Parser::parseBinary (int exprPrec, std::unique_ptr<Expr
 	    VALUES ::= VALUES | VALUES ',' VALUE | VALUES ',' '...'
 */
 #include <iostream>
-std::unique_ptr<ExprAST> Parser::parseVar() {
+std::shared_ptr<ExprAST> Parser::parseVar (const bool arg) {
 
 	auto type = parseType();
 	if (!type) {
@@ -168,7 +169,12 @@ std::unique_ptr<ExprAST> Parser::parseVar() {
 	auto id = lexer->identifier;
 	lexer->getNextToken();
 
-	return std::make_unique<VarExprAST> (id+".arg", nullptr, type);
+	if (arg) id += ".arg";
+
+	std::shared_ptr<VarExprAST> var = std::make_shared<VarExprAST> (id, nullptr, type);
+	compiler->declareVar (var);
+
+	return var;
 
 }
 

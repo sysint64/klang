@@ -1,3 +1,4 @@
+#include "ast/all.h"
 #include "parser/parser.h"
 #include "compiler.h"
 

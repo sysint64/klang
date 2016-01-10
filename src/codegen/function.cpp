@@ -5,10 +5,16 @@ std::unique_ptr<BaseIR> DirectiveAST::codegen() {
 
 	auto codegen = compiler->getCurrentCodegen();
 
-	//if (name == "inline")
+	if (name == "inline")
 		return codegen->createInlineDirectiveIR();
 
-	//return nullptr;
+	if (name == "fastcall")
+		return codegen->createFastCallDirectiveIR();
+
+	if (name == "stdcall")
+		return codegen->createStdCallDirectiveIR();
+
+	return nullptr;
 
 }
 

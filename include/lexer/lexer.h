@@ -4,7 +4,7 @@
 #include <vector>
 #include <iostream>
 
-enum TokenChar { // last: -20
+enum TokenChar { // last: -20, del: -10
 
 	// tok_ra : ->
 	// tok_la : <-
@@ -16,7 +16,7 @@ enum TokenChar { // last: -20
 
 	tok_le = -5, tok_ge = -6, tok_ne = -7, tok_eq = -8,
 
-	tok_def = -9, tok_cc = -10,
+	tok_def = -9,
 	tok_shl = -11, tok_shr = -12, tok_or = -13, tok_and = -14,
 	tok_true = -15, tok_false = -16,
 	tok_ra = -17, tok_la = -18, tok_ba = -19,

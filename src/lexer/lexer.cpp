@@ -155,7 +155,7 @@ int Lexer::lexId() {
 
 	// Call Convs
 
-	meta = identifier;
+	/*meta = identifier;
 
 	if (identifier == "fastcc")   return tok_cc;
 	if (identifier == "ccc")      return tok_cc;
@@ -163,7 +163,7 @@ int Lexer::lexId() {
 	if (identifier == "cc")       return tok_cc;
 	if (identifier == "fastcall") { meta = "x86_fastcallcc"; return tok_cc; }
 	if (identifier == "stdcall")  { meta = "x86_stdcallcc";  return tok_cc; }
-	if (identifier == "cdecl")    { meta = "";               return tok_cc; }
+	if (identifier == "cdecl")    { meta = "";               return tok_cc; }*/
 
 	meta = "";
 	return tok_id;

@@ -75,6 +75,8 @@ public:
 	virtual inline std::unique_ptr<BaseIR> createArgsIR   (std::vector<std::unique_ptr<BaseIR>> args) { return nullptr; }
 	virtual inline std::unique_ptr<BaseIR> createInlineDirectiveIR () { return nullptr; }
 	virtual inline std::unique_ptr<BaseIR> createDirectivesIR (std::vector<std::unique_ptr<BaseIR>> directives) { return nullptr; }
+	virtual inline std::unique_ptr<BaseIR> createFastCallDirectiveIR() { return nullptr; }
+	virtual inline std::unique_ptr<BaseIR> createStdCallDirectiveIR() { return nullptr; }
 
 	// Arithmetic
 

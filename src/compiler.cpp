@@ -1,4 +1,6 @@
 #include "compiler.h"
+#include "codegen/codegen.h"
+#include "ast/all.h"
 #include "codegen/llvm/codegen.h"
 #include "config.h"
 #include <boost/range/adaptor/reversed.hpp>
@@ -18,17 +20,35 @@ void Compiler::loadMessages() {
 
 }
 
+template<typename T, typename DT>
+void Compiler::declare (std::shared_ptr<T> obj, const DT &dicts) {
+
+	auto dict = dicts.front();
+	dict->insert (std::pair<std::string, std::shared_ptr<T>>(obj->name, obj));
+
+}
+
 void Compiler::declareType (std::shared_ptr<TypeAST> type) {
+	declare<TypeAST, std::vector<std::shared_ptr<TypesDict>>>(type, typesDictsStack);
+}
 
-	std::shared_ptr<TypesDict> dict = typesDictsStack[0];
-	dict->insert (std::pair<std::string, std::shared_ptr<TypeAST>>(type->name, type));
+void Compiler::declareFunc (std::shared_ptr<PrototypeAST> func) {
+	declare<PrototypeAST, std::vector<std::shared_ptr<FuncsDict>>>(func, funcsDictsStack);
+}
 
+void Compiler::declareVar (std::shared_ptr<VarExprAST> var) {
+	declare<VarExprAST, std::vector<std::shared_ptr<VarsDict>>>(var, varsDictsStack);
 }
 
 void Compiler::declareDefaultTypes() {
 
-	std::shared_ptr<TypesDict> globalTypeDict = std::make_shared<TypesDict>();
-	typesDictsStack.push_back (globalTypeDict);
+	std::shared_ptr<TypesDict> globalTypesDict = std::make_shared<TypesDict>();
+	std::shared_ptr<FuncsDict> globalFuncsDict = std::make_shared<FuncsDict>();
+	std::shared_ptr<VarsDict > globalVarsDict  = std::make_shared<VarsDict >();
+
+	typesDictsStack.push_back (globalTypesDict);
+	funcsDictsStack.push_back (globalFuncsDict);
+	varsDictsStack .push_back (globalVarsDict );
 
 	declareType (std::make_shared<VoidTypeAST> ("void"));
 

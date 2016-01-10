@@ -40,6 +40,14 @@ virtual inline std::unique_ptr<BaseIR> createInlineDirectiveIR() override { \
 	return std::make_unique<ir::InlineDirectiveIR>(); \
 } \
 \
+virtual inline std::unique_ptr<BaseIR> createFastCallDirectiveIR() override { \
+	return std::make_unique<ir::FastCallDirectiveIR>(); \
+} \
+\
+virtual inline std::unique_ptr<BaseIR> createStdCallDirectiveIR() override { \
+	return std::make_unique<ir::StdCallDirectiveIR>(); \
+} \
+\
 virtual inline std::unique_ptr<BaseIR> createDirectivesIR (std::vector<std::unique_ptr<BaseIR>> directives) override \
 { \
 	return std::make_unique<ir::DirectivesIR> (std::move(directives)); \

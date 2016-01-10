@@ -98,7 +98,7 @@ namespace llvm_ir {
 		ArgsIR (std::vector<std::unique_ptr<BaseIR>> args) {
 
 			for (const auto &arg : args)
-				emit += arg->emit+", ";
+				emit += arg ? arg->emit+", " : "";
 
 			if (emit.size() >= 2) { // Remove last ", "
 
@@ -117,7 +117,7 @@ namespace llvm_ir {
 		DirectivesIR (std::vector<std::unique_ptr<BaseIR>> directives) {
 
 			for (const auto &directive : directives)
-				emit += directive->emit+" ";
+				emit += directive ? directive->emit+" " : "";
 
 			if (emit.size() >= 2) // Remove last " "
 				emit.pop_back();
@@ -153,7 +153,17 @@ namespace llvm_ir {
 
 	class InlineDirectiveIR : public BaseIR {
 	public:
-		InlineDirectiveIR () { emit = "inlinehint"; }
+		InlineDirectiveIR() { emit = "inlinehint"; }
+	};
+
+	class FastCallDirectiveIR : public BaseIR {
+	public:
+		FastCallDirectiveIR() { emit = "x86_fastcallcc"; }
+	};
+
+	class StdCallDirectiveIR : public BaseIR {
+	public:
+		StdCallDirectiveIR() { emit = "x86_stdcallcc"; }
 	};
 
 	class ExternDirectiveIR : public BaseIR {

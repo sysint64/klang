@@ -25,7 +25,8 @@ set(RELEASE_FLAGS_64 "${CMAKE_CXX_FLAGS} -m64 -mfpmath=sse -Ofast -flto -march=n
 
 if (APPLE)
 	set(CMAKE_CXX_FLAGS "${DEBUG_FLAGS} -std=c++14 -stdlib=libc++")
-	include_directories(~/Documents/libcxx/include)
+	#include_directories(~/Documents/libcxx/include)
+	include_directories(/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/usr/include)
 else()
 	set(CMAKE_CXX_FLAGS "${DEBUG_FLAGS} -std=c++14")
 endif()
