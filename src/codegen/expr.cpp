@@ -33,7 +33,7 @@ std::unique_ptr<BaseIR> NumBinaryExprAST::codegen() {
 
 	switch (op) {
 
-		case '+' : return compiler->getCurrentCodegen()->createAddIR (std::move(L), std::move(R));
+		case '+' : return compiler->getCurrentCodegen()->createAddIR (L.get(), R.get());
 
 	}
 

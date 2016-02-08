@@ -25,10 +25,9 @@ Parser::Parser (Compiler *compiler) {
 void Parser::parse() {
 
 	lexer->tokenStack.clear();
+	lexer->getNextToken();
 
 	while (true) {
-
-		lexer->getNextToken();
 
 		switch (lexer->currentToken) {
 
@@ -53,13 +52,72 @@ void Parser::handleDefinition() {
 
 	if (auto def = parsePrototype()) {
 
-		auto IR = def->codegen();
-		compiler->getCurrentCodegen()->insert (std::move(IR), Codegen::Head);
+		compiler->currentPrototype = def;
+		compiler->declareFunc (def);
+
+		// TODO: Move to one function check is break token for definition
+		if (lexer->currentToken == tok_def || lexer->currentToken == tok_eof) {
+
+			if (def->external) {
+
+				auto IR = def->codegenDeclare();
+				compiler->getCurrentCodegen()->insert (std::move(IR), Codegen::Head);
+
+			}
+
+			return;
+
+		} else if (auto func = parseFunction (def)) {
+
+			auto IR = func->codegen();
+			compiler->getCurrentCodegen()->insert (std::move(IR), Codegen::Body);
+
+		} else {
+
+			// TODO: display error
+			lexer->getNextToken();
+
+		}
 
 	} else {
 
 		lexer->getNextToken();
 
 	}
+
+}
+
+// parse statement
+
+std::unique_ptr<StmtAST> Parser::parseStatement() {
+
+	switch (lexer->currentToken) {
+
+		case tok_return: return parseReturn(); break;
+		default: lexer->getNextToken();
+
+	}
+
+	return nullptr;
+
+}
+
+// Parse Statements
+
+std::unique_ptr<StmtAST> Parser::parseStatements() {
+
+	std::vector<std::unique_ptr<StmtAST>> items;
+
+	while (lexer->currentToken != tok_end) {
+
+		auto stmt = parseStatement();
+		items.push_back (std::move(stmt));
+
+	}
+
+	if (lexer->currentToken == tok_end)
+		puts ("END :o");
+
+	return std::make_unique<BlockStmtAST>(std::move(items));
 
 }

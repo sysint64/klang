@@ -15,6 +15,10 @@ std::unique_ptr<ArgsAST> Parser::parseArgs() {
 	do {
 
 		lexer->getNextToken();
+
+		if (lexer->currentToken == ')')
+			return std::make_unique<ArgsAST> (std::move(args));
+
 		auto arg = parseVar();
 		args.push_back (std::move(arg));
 
@@ -76,7 +80,7 @@ std::unique_ptr<DirectivesAST> Parser::parseDirectives() {
 	                  DEF ID '(' ARGS ')' '->' TYPE '::' DIRECTICES
 */
 
-std::unique_ptr<PrototypeAST> Parser::parsePrototype() {
+std::shared_ptr<PrototypeAST> Parser::parsePrototype() {
 
 	lexer->getNextToken(); //Eat tokenn `def`
 
@@ -89,6 +93,8 @@ std::unique_ptr<PrototypeAST> Parser::parsePrototype() {
 
 	std::string name = lexer->identifier;
 	lexer->getNextToken();
+
+	puts (name.c_str());
 
 	if (lexer->currentToken != '(') {
 
@@ -124,23 +130,80 @@ std::unique_ptr<PrototypeAST> Parser::parsePrototype() {
 		if (!type) {
 
 			puts ("cant find type");
+			puts (lexer->identifier.c_str());
+
 			return nullptr;
 
 		}
 
-	}
+		lexer->getNextToken();
 
-	lexer->getNextToken();
+	}
 
 	// Directives
 
 	std::unique_ptr<DirectivesAST> directives = nullptr;
-	if (lexer->currentToken == tok_dd) {
 
+	if (lexer->currentToken == tok_dd)
 		directives = parseDirectives();
+
+	return std::make_shared<PrototypeAST> (name, std::move(args), std::move(directives), type);
+
+}
+
+/** \brief
+	Parse function, `example` : `def sum (int a, b) -> int return a+b end` or
+	`def sum (int a, b) -> int return a+b` if one expression
+	Grammar:
+	    PROTOTYPE ::= PROTOTYPE BODY RET END |
+	                  PROTOTYPE BODY END |
+	                  PROTOTYPE EXPR
+*/
+
+std::unique_ptr<FunctionAST> Parser::parseFunction (std::shared_ptr<PrototypeAST> prototype) {
+
+	/*std::vector<std::unique_ptr<StmtAST>> items;
+
+	while (lexer->currentToken != tok_end) {
+
+		auto stmt = parseStmt();
+		items.push_back (stmt);
+		lexer->getNextToken();
+
+	}*/
+
+	auto body = parseStatements();
+	return std::make_unique<FunctionAST>(std::move(body), prototype);
+
+}
+
+/** \brief
+	Parse return statement, `example` : `return` or `return 12`
+	Grammar:
+	    RETURN_STMT ::= RETURN |
+	                    RETURN EXPR
+ */
+
+std::unique_ptr<StmtAST> Parser::parseReturn() {
+
+	lexer->getNextToken();
+
+	if (lexer->currentToken == tok_end) {
+
+		return std::make_unique<ReturnStmtAST>(compiler->currentPrototype->type);
+
+	} else {
+
+		auto expr = parseExpr();
+
+		if (!expr)
+			return nullptr;
+
+		return std::make_unique<ReturnStmtAST>
+			(compiler->currentPrototype->type, std::move(expr));
 
 	}
 
-	return std::make_unique<PrototypeAST> (name, std::move(args), std::move(directives), type);
+	return nullptr;
 
 }

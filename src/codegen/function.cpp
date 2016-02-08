@@ -56,6 +56,52 @@ std::unique_ptr<BaseIR> PrototypeAST::codegen() {
 
 std::unique_ptr<BaseIR> PrototypeAST::codegenDeclare() {
 
-	return nullptr;
+	auto codegen = compiler->getCurrentCodegen();
+
+	std::unique_ptr<BaseIR> argsIR       = args       ? args      ->codegen() : nullptr;
+	std::unique_ptr<BaseIR> directivesIR = directives ? directives->codegen() : nullptr;
+
+	auto typeIR = type->codegen();
+	return codegen->createDeclareIR (name, std::move(argsIR), std::move(directivesIR), std::move(typeIR));
+
+}
+
+std::unique_ptr<BaseIR> FunctionAST::codegen() {
+
+	auto codegen = compiler->getCurrentCodegen();
+
+	std::unique_ptr<BaseIR> prototypeIR  = prototype  ? prototype->codegen() : nullptr;
+	std::unique_ptr<BaseIR> bodyIR       = body       ? body     ->codegen() : nullptr;
+	std::unique_ptr<BaseIR> endIR        = codegen->createEndIR();
+
+	std::vector<std::unique_ptr<BaseIR>> stack;
+
+	stack.push_back (std::move(prototypeIR));
+	stack.push_back (std::move(bodyIR));
+	stack.push_back (std::move(endIR));
+
+	return codegen->createStackIR (std::move (stack));
+
+}
+
+std::unique_ptr<BaseIR> ReturnStmtAST::codegen() {
+
+	auto codegen = compiler->getCurrentCodegen();
+
+	if (retVal == nullptr) {
+		return codegen->createRetVoidIR();
+	} else {
+		auto  retValIR = retVal->codegen();
+		auto _retValIR = retValIR.get();
+
+		auto retIR = codegen->createRetIR (_retValIR);
+		std::vector<std::unique_ptr<BaseIR>> stack;
+
+		stack.push_back (std::move(retValIR));
+		stack.push_back (std::move(retIR));
+
+		return codegen->createStackIR (std::move (stack));
+
+	}
 
 }

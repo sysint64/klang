@@ -18,6 +18,8 @@ std::unique_ptr<ExprAST> Parser::parseNumber() {
 	if (val == ival) return std::make_unique<IntExprAST  > (ival, size);
 	//else             return std::make_unique<FloatExprAST> ( val, size);
 
+	return nullptr;
+
 }
 
 std::unique_ptr<ExprAST> Parser::parseBoolean (const bool val) const {

@@ -152,6 +152,8 @@ int Lexer::lexId() {
 
 
 	if (identifier == "def")      return tok_def;
+	if (identifier == "end")      return tok_end;
+	if (identifier == "return")   return tok_return;
 
 	// Call Convs
 

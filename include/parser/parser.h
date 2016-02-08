@@ -11,6 +11,7 @@ class ArgsAST;
 class DirectiveAST;
 class DirectivesAST;
 class PrototypeAST;
+class FunctionAST;
 class TypeAST;
 //
 class Compiler;
@@ -45,11 +46,18 @@ public:
 	std::unique_ptr<ArgsAST>       parseArgs(); // +
 	std::unique_ptr<DirectiveAST>  parseDirective(); // -
 	std::unique_ptr<DirectivesAST> parseDirectives(); // +
-	std::unique_ptr<PrototypeAST>  parsePrototype(); // -
+	std::shared_ptr<PrototypeAST>  parsePrototype(); // +
+	std::unique_ptr<FunctionAST>   parseFunction (std::shared_ptr<PrototypeAST> prototype); // -
 
 	// Type
 
 	std::shared_ptr<TypeAST> parseType(); // -
+
+	// Statements
+
+	std::unique_ptr<StmtAST> parseStatement();
+	std::unique_ptr<StmtAST> parseStatements();
+	std::unique_ptr<StmtAST> parseReturn (); // -
 
 	// Handles
 

@@ -61,10 +61,8 @@ namespace llvm_ir {
 	class AddIR : public BaseIR {
 	public:
 
-		AddIR (std::unique_ptr<BaseIR> A, std::unique_ptr<BaseIR> B,
-			const bool nsw = false, const bool nuw = false)
-		{
-
+		AddIR (BaseIR *A, BaseIR *B, const bool nsw = false, const bool nuw = false) {
+			
 			addr = "%add.1";
 			type = A->type;
 			std::string nw = " ";
@@ -73,7 +71,7 @@ namespace llvm_ir {
 			else if (nuw) nw += "nuw ";
 			else nw = "";
 
-			emit = "  "+addr+" = add "+nw+A->type->emit+" "+A->addr+", "+B->addr;
+			emit = "  "+addr+" = add "+nw+A->type->emit+" "+A->addr+", "+B->addr+"\n";
 
 		}
 
@@ -137,17 +135,63 @@ namespace llvm_ir {
 			std::string argsEmit       = args       ? args      ->emit : "";
 
 			if (directivesEmit != "") directivesEmit += " ";
-			emit = "define "+type->emit+" @"+name+"("+argsEmit+") "+directivesEmit+"{";
+			emit = "define "+type->emit+" @"+name+"("+argsEmit+") "+directivesEmit+"{\n";
 
 		}
 
 	};
 
-	class RetIR : public BaseIR {
+	class EndIR : public BaseIR {
+	public:
+		EndIR () { emit = "}\n"; }
+	};
+
+	class DeclareIR : public BaseIR {
+	public:
+
+		DeclareIR (const std::string &name, std::unique_ptr<BaseIR> args,
+			std::unique_ptr<BaseIR> directives, std::unique_ptr<BaseIR> type)
+		{
+
+			std::string directivesEmit = directives ? directives->emit : "";
+			std::string argsEmit       = args       ? args      ->emit : "";
+
+			if (directivesEmit != "") directivesEmit += " ";
+			emit = "declare "+type->emit+" @"+name+"("+argsEmit+") "+directivesEmit;
+
+		}
 
 	};
 
-	class BodyIR : public BaseIR {
+	class RetVoidIR : public BaseIR {
+	public:
+
+		RetVoidIR () {
+			emit = "  ret void\n";
+		}
+
+	};
+
+	class RetIR : public BaseIR {
+	public:
+
+		RetIR (BaseIR *val) {
+			emit = "  ret "+val->type->emit+" "+val->addr+"\n";
+		}
+
+	};
+
+	class StackIR : public BaseIR {
+	public:
+
+		StackIR (std::vector<std::unique_ptr<BaseIR>> body) {
+
+			for (const auto &ir : body) {
+				if (ir)
+					emit += ir->emit;
+			}
+
+		}
 
 	};
 

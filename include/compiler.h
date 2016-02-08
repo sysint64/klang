@@ -44,6 +44,7 @@ public:
 	std::string lang   = "en";
 	std::string currentNamespace = "main";
 	std::unique_ptr<Codegen> codegen;
+	std::shared_ptr<PrototypeAST> currentPrototype = nullptr;
 
 	void compile();
 	void parseCmd (int argc, char *argv[]);

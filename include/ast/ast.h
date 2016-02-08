@@ -55,4 +55,9 @@ public:
 class BlockStmtAST : public StmtAST {
 public:
 	std::vector<std::unique_ptr<StmtAST>> data;
+
+	BlockStmtAST(std::vector<std::unique_ptr<StmtAST>> data)
+		: data(std::move(data)) {}
+
+	virtual std::unique_ptr<BaseIR> codegen() override;
 };
