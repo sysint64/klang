@@ -1,8 +1,22 @@
 #pragma once
 #include "codegen/codegen.h"
 #include <cassert>
+#include <map>
 
 namespace llvm_ir {
+
+	static std::map<std::string, int> namesCounter;
+
+	static std::string getName (const std::string &name) {
+
+		if (namesCounter.find(name) == namesCounter.end())
+			namesCounter[name]++;
+		else
+			namesCounter[name] = 0;
+
+		return name+"."+std::to_string (namesCounter[name]);
+
+	}
 
 	class IntTyIR : public BaseIR {
 	public:
@@ -62,8 +76,8 @@ namespace llvm_ir {
 	public:
 
 		AddIR (BaseIR *A, BaseIR *B, const bool nsw = false, const bool nuw = false) {
-			
-			addr = "%add.1";
+
+			addr = "%"+getName("add");
 			type = A->type;
 			std::string nw = " ";
 
@@ -187,8 +201,13 @@ namespace llvm_ir {
 		StackIR (std::vector<std::unique_ptr<BaseIR>> body) {
 
 			for (const auto &ir : body) {
-				if (ir)
+
+				if (ir) {
 					emit += ir->emit;
+					addr  = ir->addr;
+					type  = ir->type;
+				}
+
 			}
 
 		}

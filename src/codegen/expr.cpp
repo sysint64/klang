@@ -25,19 +25,35 @@ std::unique_ptr<BaseIR> VarExprAST::codegen() {
 
 std::unique_ptr<BaseIR> NumBinaryExprAST::codegen() {
 
+	auto codegen = compiler->getCurrentCodegen();
+
 	std::unique_ptr<BaseIR> L = LHS->codegen();
 	std::unique_ptr<BaseIR> R = RHS->codegen();
 
 	if (!L || !R)
 		return nullptr;
 
+	auto _L = L.get();
+	auto _R = R.get();
+
+	std::vector<std::unique_ptr<BaseIR>> stack;
+	std::unique_ptr<BaseIR> bin = nullptr;
+
+	if (!L->isConst) stack.push_back (std::move(L));
+	if (!R->isConst) stack.push_back (std::move(R));
+
 	switch (op) {
 
-		case '+' : return compiler->getCurrentCodegen()->createAddIR (L.get(), R.get());
+		case '+' : bin = compiler->getCurrentCodegen()->createAddIR (_L, _R); break;
 
 	}
 
-	return nullptr;
+	if (!bin)
+		return nullptr;
+
+	stack.push_back (std::move(bin));
+	return codegen->createStackIR (std::move(stack));
+
 	/*if (L == 0 || R == 0) return 0;
 
 	switch (Op) {
