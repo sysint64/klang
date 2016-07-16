@@ -9,7 +9,9 @@ public:
 
 	bool dataLayout = true;
 
-	LLVMCodegen () { f = fopen ("a.out.ll", "w"); }
+	LLVMCodegen (const std::string &output) {
+		f = fopen (output.c_str(), "w");
+	}
 	~LLVMCodegen() { if (f != nullptr) fclose(f); }
 
 	CODEGEN_FACTORY(llvm_ir)

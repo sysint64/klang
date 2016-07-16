@@ -84,7 +84,6 @@ void Compiler::parseCmd (int argc, char *argv[]) {
 			++i;
 
 			if (i < argc) output = argv[i];
-			//else return Error<int>(no_input_file);
 
 			continue;
 
@@ -94,7 +93,6 @@ void Compiler::parseCmd (int argc, char *argv[]) {
 
 	}
 
-	//
 	loadMessages();
 
 }
