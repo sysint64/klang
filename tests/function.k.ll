@@ -28,4 +28,3 @@ define void @proc() inlinehint {
 
 ; Metadata
 !0 = metadata !{ metadata !0 }
-
