@@ -62,23 +62,22 @@ void Compiler::displayMainHelp (int argc, char *argv[]) {
 
 void Compiler::parseCmd (int argc, char *argv[]) {
 
-	input = argv[1];
+	for (int i = 1; i < argc; ++i) {
 
-	for (int i = 2; i < argc; ++i) {
-
-		if (strcmp (argv[i], "--help") == 0) {
+		if (strcmp(argv[i], "--help") == 0) {
 
 			displayMainHelp (argc, argv);
+			exit(0);
 
-		} else if (strcmp (argv[i], "--help=optimizers") == 0) {
+		} else if (strcmp(argv[i], "--help=optimizers") == 0) {
 
 			displayOptimizersHelp (argc, argv);
 
-		} else if (strcmp (argv[i], "--emit=asm") == 0) {
+		} else if (strcmp(argv[i], "--emit=asm") == 0) {
 
-		} else if (strcmp (argv[i], "--emit=llvm") == 0) {
+		} else if (strcmp(argv[i], "--emit=llvm") == 0) {
 
-		} else if (strcmp (argv[i], "--emit=cpp") == 0) {
+		} else if (strcmp(argv[i], "--emit=cpp") == 0) {
 
 		} else if (strcmp(argv[i], "-o") == 0) {
 
@@ -89,6 +88,8 @@ void Compiler::parseCmd (int argc, char *argv[]) {
 
 			continue;
 
+		} else {
+			input = argv[1];
 		}
 
 	}

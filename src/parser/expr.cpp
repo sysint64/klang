@@ -1,5 +1,6 @@
 #include "ast/all.h"
 #include "parser/parser.h"
+#include <math.h>
 
 std::unique_ptr<ExprAST> Parser::parseNumber() {
 
