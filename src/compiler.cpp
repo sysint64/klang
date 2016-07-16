@@ -10,7 +10,7 @@ void Compiler::compile() {
 	declareDefaultTypes();
 
 	parser  = std::make_unique<Parser>(this);
-	codegen = std::make_unique<LLVMCodegen>();
+	codegen = std::make_unique<LLVMCodegen>(output+".ll");
 
 	parser->parse();
 
